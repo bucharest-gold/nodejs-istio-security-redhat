@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: nodejs-istio-security-greeting-service
+  name: nodejs-istio-security-redhat-greeting-service
   annotations:
     description: This template creates a Build Configuration using an S2I builder.
     tags: instant-app
@@ -30,7 +30,7 @@ objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: nodejs-istio-security-greeting
+    name: nodejs-istio-security-redhat-greeting
   spec: {}
 - apiVersion: v1
   kind: ImageStream
@@ -41,16 +41,16 @@ objects:
     - name: latest
       from:
         kind: DockerImage
-        name: 'bucharestgold/centos7-s2i-nodejs:8.x'
+        name: 'registry.access.redhat.com/rhoar-nodejs/nodejs-8:latest'
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: nodejs-istio-security-greeting
+    name: nodejs-istio-security-redhat-greeting
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: nodejs-istio-security-greeting:latest
+        name: nodejs-istio-security-redhat-greeting:latest
     postCommit: {}
     resources: {}
     source:
@@ -78,9 +78,9 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: nodejs-istio-security-greeting
+    name: nodejs-istio-security-redhat-greeting
     labels:
-      app: nodejs-istio-security-greeting
+      app: nodejs-istio-security-redhat-greeting
   spec:
     template:
       spec:
@@ -98,8 +98,8 @@ objects:
                 - curl
                 - http://localhost:8080/api/health/liveness
               initialDelaySeconds: 180
-            image: nodejs-istio-security-greeting
-            name: nodejs-istio-security-greeting
+            image: nodejs-istio-security-redhat-greeting
+            name: nodejs-istio-security-redhat-greeting
             securityContext:
               privileged: false
             ports:
@@ -110,20 +110,20 @@ objects:
         annotations:
           sidecar.istio.io/inject: "true"
         labels:
-          app: nodejs-istio-security-greeting
+          app: nodejs-istio-security-redhat-greeting
     replicas: 1
     selector:
-      app: nodejs-istio-security-greeting
+      app: nodejs-istio-security-redhat-greeting
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChangeParams:
           automatic: true
           containerNames:
-            - nodejs-istio-security-greeting
+            - nodejs-istio-security-redhat-greeting
           from:
             kind: ImageStreamTag
-            name: 'nodejs-istio-security-greeting:latest'
+            name: 'nodejs-istio-security-redhat-greeting:latest'
 - apiVersion: v1
   kind: Service
   spec:
@@ -131,11 +131,11 @@ objects:
       - port: 8080
         name: http
     selector:
-      app: nodejs-istio-security-greeting
+      app: nodejs-istio-security-redhat-greeting
   metadata:
-    name: nodejs-istio-security-greeting
+    name: nodejs-istio-security-redhat-greeting
     labels:
-      app: nodejs-istio-security-greeting
+      app: nodejs-istio-security-redhat-greeting
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
@@ -144,11 +144,11 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: nodejs-istio-security-greeting
-    name: nodejs-istio-security-greeting
+      app: nodejs-istio-security-redhat-greeting
+    name: nodejs-istio-security-redhat-greeting
   spec:
     port:
       targetPort: 8080
     to:
       kind: Service
-      name: nodejs-istio-security-greeting
+      name: nodejs-istio-security-redhat-greeting

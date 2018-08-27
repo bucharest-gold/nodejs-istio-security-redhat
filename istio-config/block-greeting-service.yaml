@@ -18,7 +18,7 @@ kind: rule
 metadata:
   name: denynamelabel
 spec:
-  match: destination.labels["app"] == "nodejs-istio-security-name" && source.labels["app"]=="nodejs-istio-security-greeting"
+  match: destination.labels["app"] == "nodejs-istio-security-redhat-name" && source.labels["app"]=="nodejs-istio-security-redhat-greeting"
   actions:
   - handler: denynameservicelabelhandler.denier
     instances: [ denynameservicelabelrequest.checknothing ]
