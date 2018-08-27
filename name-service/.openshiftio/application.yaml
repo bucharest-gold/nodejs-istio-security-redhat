@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: nodejs-istio-security-name-service
+  name: nodejs-istio-security-redhat-name-service
   annotations:
     description: This template creates a Build Configuration using an S2I builder.
     tags: instant-app
@@ -30,27 +30,27 @@ objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: nodejs-istio-security-name
+    name: nodejs-istio-security-redhat-name
   spec: {}
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: nodejs-istio-security-name-runtime
+    name: nodejs-istio-security-redhat-name-runtime
   spec:
     tags:
     - name: latest
       from:
         kind: DockerImage
-        name: 'bucharestgold/centos7-s2i-nodejs:10.x'
+        name: 'registry.access.redhat.com/rhoar-nodejs/nodejs-10:latest'
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: nodejs-istio-security-name
+    name: nodejs-istio-security-redhat-name
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: nodejs-istio-security-name:latest
+        name: nodejs-istio-security-redhat-name:latest
     postCommit: {}
     resources: {}
     source:
@@ -64,7 +64,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: nodejs-istio-security-name-runtime:latest
+          name: nodejs-istio-security-redhat-name-runtime:latest
         incremental: true
     triggers:
     - github:
@@ -82,17 +82,17 @@ objects:
       - port: 8080
         name: http
     selector:
-      app: nodejs-istio-security-name
+      app: nodejs-istio-security-redhat-name
   metadata:
-    name: nodejs-istio-security-name
+    name: nodejs-istio-security-redhat-name
     labels:
-      app: nodejs-istio-security-name
+      app: nodejs-istio-security-redhat-name
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: nodejs-istio-security-name
+    name: nodejs-istio-security-redhat-name
     labels:
-      app: nodejs-istio-security-name
+      app: nodejs-istio-security-redhat-name
   spec:
     template:
       spec:
@@ -110,8 +110,8 @@ objects:
                 - curl
                 - http://localhost:8080/api/health/liveness
               initialDelaySeconds: 180
-            image: nodejs-istio-security-name
-            name: nodejs-istio-security-name
+            image: nodejs-istio-security-redhat-name
+            name: nodejs-istio-security-redhat-name
             securityContext:
               privileged: false
             ports:
@@ -122,20 +122,20 @@ objects:
         annotations:
           sidecar.istio.io/inject: "true"
         labels:
-          app: nodejs-istio-security-name
+          app: nodejs-istio-security-redhat-name
     replicas: 1
     selector:
-      app: nodejs-istio-security-name
+      app: nodejs-istio-security-redhat-name
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChangeParams:
           automatic: true
           containerNames:
-            - nodejs-istio-security-name
+            - nodejs-istio-security-redhat-name
           from:
             kind: ImageStreamTag
-            name: 'nodejs-istio-security-name:latest'
+            name: 'nodejs-istio-security-redhat-name:latest'
 - apiVersion: v1
   kind: ServiceAccount
   metadata:

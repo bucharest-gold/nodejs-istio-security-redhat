@@ -32,8 +32,8 @@ Run the following commands to apply and execute the OpenShift templates that wil
 ```bash
 find . | grep openshiftio | grep application | xargs -n 1 oc apply -f
 
-oc new-app --template=nodejs-istio-security-greeting-service -p SOURCE_REPOSITORY_URL=https://github.com/bucharest-gold/nodejs-istio-security -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=greeting-service
-oc new-app --template=nodejs-istio-security-name-service -p SOURCE_REPOSITORY_URL=https://github.com/bucharest-gold/nodejs-istio-security -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=name-service
+oc new-app --template=nodejs-istio-security-redhat-greeting-service -p SOURCE_REPOSITORY_URL=https://github.com/bucharest-gold/nodejs-istio-security-redhat -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=greeting-service
+oc new-app --template=nodejs-istio-security-redhat-name-service -p SOURCE_REPOSITORY_URL=https://github.com/bucharest-gold/nodejs-istio-security-redhat -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=name-service
 ```
 
 ## Use Cases
@@ -50,16 +50,16 @@ This scenario demonstrates mutual transport level security between services with
     ```
 2. Retrieve the URL for the Istio Ingress Gateway route, with the below command, and open it in a web browser.
     ```
-    echo http://$(oc get route istio-ingressgateway -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/nodejs-istio-security/
+    echo http://$(oc get route istio-ingressgateway -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/nodejs-istio-security-redhat/
     ```
 3. The user will be presented with the web page of the Booster
 4. Click the "Invoke" button. You should see "Hello World" message in a result box.
 5. Modify the Greeting Service Deployment Config to disable Istio sidecar injection by setting `sidecar.istio.io/inject` to `false`.
 This can be done through the OpenShift Console UI or on the command line with:
     ```
-    oc edit deploymentconfigs/nodejs-istio-security-greeting
+    oc edit deploymentconfigs/nodejs-istio-security-redhat-greeting
     ```
-6. In the OpenShift Console UI the _nodejs-istio-security-greeting_ deployment will restarted with the changes
+6. In the OpenShift Console UI the _nodejs-istio-security-redhat-greeting_ deployment will restarted with the changes
 7. Refreshing the browser page opened at the Istio Ingress Gateway URL will now show the error:
     ```
     upstream connect error or disconnect/reset before headers
@@ -70,7 +70,7 @@ This can be done through the OpenShift Console UI or on the command line with:
 8. From the OpenShift Console UI, click on the URL route for the Greeting service and it will load the web page for the Booster.
 9. Clicking "Invoke" will result in an error appearing in the result box that looks like
     ```
-    HTTP Response Code `500` with cause: Failed to communicate with 'nodejs-istio-security-name' due to: Error: read ECONNRESET
+    HTTP Response Code `500` with cause: Failed to communicate with 'nodejs-istio-security-redhat-name' due to: Error: read ECONNRESET
     ```
     This is because the Greeting service is outside Istio, and the Name service is inside.
     mTLS prevents services outside and inside the mesh from communicating with each other.
@@ -85,7 +85,7 @@ This scenario demonstrates access control between services when mTLS is enabled.
 
 1. Retrieve the URL for the Istio Ingress Gateway route, with the below command, and open it in a web browser.
     ```
-    echo http://$(oc get route istio-ingressgateway -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/nodejs-istio-security/
+    echo http://$(oc get route istio-ingressgateway -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/nodejs-istio-security-redhat/
     ```
 2. The user will be presented with the web page of the Booster
 3. Click the "Invoke" button. You should see "Hello World" message in a result box.
