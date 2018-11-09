@@ -32,8 +32,8 @@ Run the following commands to apply and execute the OpenShift templates that wil
 ```bash
 find . | grep openshiftio | grep application | xargs -n 1 oc apply -f
 
-oc new-app --template=nodejs-istio-security-redhat-greeting-service -p SOURCE_REPOSITORY_URL=https://github.com/bucharest-gold/nodejs-istio-security-redhat -p SOURCE_REPOSITORY_REF=8.x -p SOURCE_REPOSITORY_DIR=greeting-service
-oc new-app --template=nodejs-istio-security-redhat-name-service -p SOURCE_REPOSITORY_URL=https://github.com/bucharest-gold/nodejs-istio-security-redhat -p SOURCE_REPOSITORY_REF=8.x -p SOURCE_REPOSITORY_DIR=name-service
+oc new-app --template=nodejs-istio-security-redhat-greeting-service -p SOURCE_REPOSITORY_URL=https://github.com/nodeshift-starters/nodejs-istio-security-redhat -p SOURCE_REPOSITORY_REF=8.x -p SOURCE_REPOSITORY_DIR=greeting-service
+oc new-app --template=nodejs-istio-security-redhat-name-service -p SOURCE_REPOSITORY_URL=https://github.com/nodeshift-starters/nodejs-istio-security-redhat -p SOURCE_REPOSITORY_REF=8.x -p SOURCE_REPOSITORY_DIR=name-service
 ```
 
 ## Use Cases
